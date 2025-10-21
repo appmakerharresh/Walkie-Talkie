@@ -1,368 +1,271 @@
 <!DOCTYPE html>
-<html class="dark" lang="en">
+<html lang="en">
 <head>
-	<meta charset="utf-8" />
-	<meta content="width=device-width, initial-scale=1.0" name="viewport" />
-	<title>WalkieTalk — GAS Signaling</title>
-
-	<script src="https://cdn.tailwindcss.com?plugins=forms"></script>
-	<link rel="preconnect" href="https://fonts.googleapis.com" />
-	<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
-	<link href="https://fonts.googleapis.com/css2?family=Chakra+Petch:wght@400;600&family=Orbitron:wght@600&family=Material+Symbols+Outlined:FILL@1" rel="stylesheet" />
-
-	<style type="text/tailwindcss">
-:root {
-	--background-dark: #0d131a;
-	--surface-dark: #2d3748;
-	--primary-green: #48bb78;
-	--text-primary: #e2e8f0;
-	--text-secondary: #a0aec0;
-	--border-color: #4a5568;
-}
-@layer base { body { @apply bg-[var(--background-dark)] text-[var(--text-primary)] font-sans; } }
-	</style>
-	<script>
-tailwind.config = {
-	darkMode: "class",
-	theme: {
-		extend: {
-			colors: {
-				primary: "var(--primary-green)",
-				"surface-dark": "var(--surface-dark)",
-				"text-primary": "var(--text-primary)",
-				"text-secondary": "var(--text-secondary)",
-				"border-color": "var(--border-color)",
-			},
-			fontFamily: { display: ["Orbitron","sans-serif"], body: ["Chakra Petch","sans-serif"] },
-			boxShadow: {
-				'button-press': 'inset 4px 4px 8px rgba(0,0,0,0.6), inset -4px -4px 8px rgba(255,255,255,0.1)',
-				'button-idle': '4px 4px 8px rgba(0,0,0,0.4), -4px -4px 8px rgba(255,255,255,0.05)',
-			}
-		}
-	}
-};
-	</script>
-
-	<style>
-.material-symbols-outlined { font-variation-settings: 'FILL' 1, 'wght' 400, 'GRAD' 0, 'opsz' 24; }
-.segmented-display {
-	background-color: #2d3748; border: 2px solid #4a5568; padding: 1rem 1.5rem; border-radius: 0.5rem;
-	box-shadow: inset 2px 2px 5px rgba(0,0,0,0.5); text-shadow: 0 0 5px #48bb78, 0 0 10px #48bb78;
-}
-
-/* Mobile widget styling (scoped) */
-#mobile-widget { display:flex; justify-content:center; align-items:center; }
-#mobile-widget .walkie { width:95%; max-width:360px; background:linear-gradient(145deg,#222,#111); border-radius:25px; box-shadow:0 0 40px #000; padding:15px; display:flex; flex-direction:column; align-items:center; }
-#mobile-widget .display { width:100%; height:90px; background:#0c0c0c; border-radius:15px; margin-bottom:10px; display:flex; flex-direction:column; justify-content:center; align-items:center; color:#0f0; font-weight:bold; box-shadow: inset 0 0 10px #0f0; }
-#mobile-widget .channel-name { font-size:20px; text-shadow:0 0 5px #0f0; }
-#mobile-widget .freq { font-size:16px; margin-top:5px; text-shadow:0 0 3px #0f0; }
-#mobile-widget .led { width:20px; height:20px; border-radius:50%; background:green; margin:5px auto; box-shadow:0 0 10px #0f0; transition:0.2s; }
-#mobile-widget .talk-btn { width:90%; height:60px; background:linear-gradient(#0a0,#060); border:none; border-radius:12px; font-size:18px; color:#fff; cursor:pointer; margin:10px; box-shadow:0 5px #040; transition:0.1s; }
-#mobile-widget .talk-btn:active { box-shadow:0 2px #020; transform:translateY(3px); }
-#mobile-widget .channel-dial { width:180px; height:180px; border-radius:50%; border:5px solid #0f0; margin:10px auto; background:radial-gradient(circle,#111,#000); box-shadow:0 0 12px #0f0 inset; position:relative; display:flex; justify-content:center; align-items:center; perspective:600px; }
-#mobile-widget .dial-pointer { width:4px; height:90px; background:#0f0; position:absolute; top:15px; transform-origin:bottom center; transition:0.3s ease-in-out; box-shadow:0 0 8px #0f0; }
-#mobile-widget .squelch { margin:10px; display:flex; align-items:center; width:90%; justify-content:space-between; }
-#mobile-widget .squelch input { width:65%; transform:rotate(-90deg); transform-origin:center center; }
-#mobile-widget canvas { width:100%; height:120px; margin-top:10px; background:#000; border-radius:12px; box-shadow:0 0 8px #0f0 inset; }
-
-@media (max-width: 400px) {
-	#mobile-widget .walkie { padding:10px; }
-	#mobile-widget .talk-btn { font-size:16px; height:50px; }
-	#mobile-widget .display { height:80px; }
-	#mobile-widget .channel-name { font-size:18px; }
-	#mobile-widget .freq { font-size:14px; }
-}
-	</style>
+<meta charset="utf-8"/>
+<meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+<title>WalkieTalk - Rugged Edition</title>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Chakra+Petch:wght@700&family=Orbitron:wght@400..900&display=swap" rel="stylesheet"/>
+<style>
+  :root {
+    --background-dark: #1a202c;
+    --surface-dark: #2d3748;
+    --primary-green: #48bb78;
+    --text-primary: #e2e8f0;
+    --text-secondary: #a0aec0;
+    --border-color: #4a5568;
+  }
+  * { box-sizing: border-box; margin:0; padding:0; }
+  body { font-family:'Chakra Petch',sans-serif; background-color:var(--background-dark); color:var(--text-primary); display:flex; min-height:100vh; }
+  .material-symbols-outlined { font-variation-settings: 'FILL' 1, 'wght' 400, 'GRAD' 0, 'opsz' 24; }
+  .container { display:flex; flex:1; border:8px solid #2d3748; border-radius:1rem; overflow:hidden; }
+  aside { width:320px; background-color:#151b23; border-right:1px solid var(--border-color); padding:16px; display:flex; flex-direction:column; gap:16px; }
+  main { flex:1; display:flex; flex-direction:column; }
+  header { display:flex; justify-content:space-between; align-items:center; background-color:#151b23; border-bottom:1px solid var(--border-color); padding:12px 40px; }
+  header h2 { font-family:'Orbitron',sans-serif; text-transform:uppercase; font-size:1.125rem; letter-spacing:0.15em; }
+  .search-input { display:flex; align-items:center; background-color:var(--surface-dark); border:1px solid var(--border-color); border-radius:6px; padding:0 8px; height:48px; }
+  .search-input input { flex:1; background:transparent; border:none; color:var(--text-primary); font-size:1rem; padding-left:8px; }
+  .search-input input::placeholder { color:var(--text-secondary); }
+  .channel { display:flex; align-items:center; gap:12px; padding:8px 12px; border-radius:6px; cursor:pointer; }
+  .channel.active { background-color: rgba(72,187,120,0.2); border-left:4px solid var(--primary-green); color:var(--text-primary); }
+  .channel:hover:not(.active) { background-color: rgba(45,55,72,0.3); color:var(--text-primary); }
+  .channel span { color:var(--primary-green); }
+  .main-content { flex:1; display:flex; flex-direction:column; align-items:center; justify-content:center; padding:32px; background-image: radial-gradient(circle, #1a202c 50%, transparent 100%), linear-gradient(rgba(45,55,72,0.3) 1px, transparent 1px), linear-gradient(90deg, rgba(45,55,72,0.3) 1px, transparent 1px); background-size: 100% 100%, 20px 20px, 20px 20px; }
+  .segmented-display { background-color:var(--surface-dark); border:2px solid var(--border-color); padding:16px 24px; border-radius:8px; text-align:center; text-shadow:0 0 5px var(--primary-green), 0 0 10px var(--primary-green); margin-bottom:32px; }
+  .segmented-display h1 { font-family:'Orbitron',sans-serif; font-size:3rem; font-weight:bold; text-transform:uppercase; }
+  .transmit-btn { position:relative; display:inline-flex; flex-direction:column; align-items:center; justify-content:center; border-radius:50%; background-color:#3c4a5e; border:4px solid #2d3748; padding:16px; font-family:'Chakra Petch',sans-serif; color:var(--text-primary); cursor:pointer; transition:all 0.2s ease; box-shadow:4px 4px 8px rgba(0,0,0,0.4), -4px -4px 8px rgba(255,255,255,0.05); min-width:128px; min-height:128px; text-align:center; }
+  .transmit-btn:active { background-color:var(--primary-green); color:white; box-shadow: inset 4px 4px 8px rgba(0,0,0,0.6), inset -4px -4px 8px rgba(255,255,255,0.1); border-color:rgba(72,187,120,0.5); }
+  .transmit-btn span:first-child { font-size:3rem; line-height:1; }
+  .transmit-btn span:last-child { font-size:1rem; text-transform:uppercase; margin-top:6px; }
+  .status { display:flex; align-items:center; gap:16px; padding:16px; border:1px solid var(--border-color); border-radius:8px; background-color:var(--surface-dark); }
+  .status .ping { position:relative; width:12px; height:12px; }
+  .status .ping::before { content: ''; position:absolute; width:100%; height:100%; border-radius:50%; background-color: rgba(72,187,120,0.5); animation: ping 1s infinite; }
+  .status .ping div { width:12px; height:12px; background-color:#48bb78; border-radius:50%; position:relative; }
+  @keyframes ping { 0% { transform: scale(0.5); opacity:1; } 100% { transform: scale(2); opacity:0; } }
+  @keyframes pulse { 0%,100% { transform: scale(1); opacity:1; } 50% { transform: scale(1.2); opacity:0.5; } }
+</style>
 </head>
-<body class="bg-background-dark font-body">
-	<div class="relative flex h-screen min-h-screen w-full flex-col overflow-hidden bg-[#0d131a] border-8 border-[#2d3748] rounded-2xl">
-		<div class="flex h-full grow">
-			<aside class="flex h-full w-80 flex-col border-r border-solid border-border-color bg-[#151b23] p-4">
-				<div class="flex flex-col gap-4">
-					<div class="flex items-center gap-3 border-b border-border-color pb-4">
-						<span class="material-symbols-outlined text-4xl text-primary">sensors</span>
-						<div class="flex flex-col">
-							<h1 class="text-text-primary text-xl font-bold uppercase tracking-widest font-display">Comms</h1>
-							<p class="text-primary text-sm font-bold leading-normal">Status: Secure</p>
-						</div>
-					</div>
+<body>
 
-					<div class="px-0 py-3">
-						<label class="flex flex-col min-w-40 h-12 w-full">
-							<div class="flex w-full flex-1 items-stretch rounded-md h-full border border-border-color">
-								<div class="text-text-secondary flex bg-surface-dark items-center justify-center pl-3 rounded-l-md border-r-0">
-									<span class="material-symbols-outlined">search</span>
-								</div>
-								<input class="form-input flex w-full min-w-0 flex-1 overflow-hidden rounded-md text-text-primary focus:outline-0 focus:ring-2 focus:ring-primary border-none bg-surface-dark h-full placeholder:text-text-secondary px-4 rounded-l-none border-l-0 pl-2 text-base" placeholder="Scan Frequencies..." />
-							</div>
-						</label>
-					</div>
+<!-- Username Modal -->
+<div id="usernameModal" style="position:fixed;top:0;left:0;width:100%;height:100%;background:rgba(0,0,0,0.85);display:flex;align-items:center;justify-content:center;z-index:9999;">
+  <div style="background:#2d3748;padding:32px;border-radius:12px;text-align:center;color:#e2e8f0;">
+    <h2>Enter Your Username</h2>
+    <input id="usernameInput" type="text" placeholder="Your Name" style="padding:8px 12px;margin-top:16px;font-size:1rem;border-radius:6px;border:none;outline:none;width:200px;">
+    <br/>
+    <button id="usernameBtn" style="margin-top:16px;padding:8px 16px;border:none;border-radius:6px;background:#48bb78;color:#fff;font-weight:bold;cursor:pointer;">Join</button>
+  </div>
+</div>
 
-					<div class="flex flex-col gap-2 font-body uppercase text-sm tracking-wider">
-						<div class="flex items-center gap-3 px-3 py-2 rounded-md bg-primary/20 border-l-4 border-primary">
-							<span class="material-symbols-outlined text-primary">cell_tower</span>
-							<p class="text-text-primary font-bold">Channel Alpha</p>
-						</div>
-						<div class="flex items-center gap-3 px-3 py-2 rounded-md hover:bg-surface-dark/50 cursor-pointer">
-							<span class="material-symbols-outlined text-text-secondary">cell_tower</span>
-							<p class="text-text-secondary font-medium">Channel Bravo</p>
-						</div>
-						<div class="flex items-center gap-3 px-3 py-2 rounded-md hover:bg-surface-dark/50 cursor-pointer">
-							<span class="material-symbols-outlined text-text-secondary">cell_tower</span>
-							<p class="text-text-secondary font-medium">Ops Net</p>
-						</div>
-						<div class="flex items-center gap-3 px-3 py-2 rounded-md hover:bg-surface-dark/50 cursor-pointer">
-							<span class="material-symbols-outlined text-text-secondary">cell_tower</span>
-							<p class="text-text-secondary font-medium">Command</p>
-						</div>
-						<div class="flex items-center gap-3 px-3 py-2 rounded-md hover:bg-surface-dark/50 cursor-pointer">
-							<span class="material-symbols-outlined text-text-secondary">cell_tower</span>
-							<p class="text-text-secondary font-medium">Logistics</p>
-						</div>
-					</div>
-				</div>
-			</aside>
+<div class="container">
+  <aside>
+    <div style="display:flex;align-items:center;gap:12px;border-bottom:1px solid var(--border-color);padding-bottom:16px;">
+      <span class="material-symbols-outlined" style="font-size:32px;color:var(--primary-green)">sensors</span>
+      <div>
+        <h1 style="font-family:'Orbitron',sans-serif;text-transform:uppercase;font-weight:bold;">Comms</h1>
+        <p style="font-weight:bold;color:var(--primary-green);font-size:0.875rem;">Status: Secure</p>
+      </div>
+    </div>
+    <div class="search-input">
+      <span class="material-symbols-outlined">search</span>
+      <input type="text" placeholder="Scan Frequencies..." value=""/>
+    </div>
+    <div>
+      <div class="channel active"><span class="material-symbols-outlined">cell_tower</span>Channel Alpha</div>
+      <div class="channel"><span class="material-symbols-outlined">cell_tower</span>Channel Bravo</div>
+      <div class="channel"><span class="material-symbols-outlined">cell_tower</span>Ops Net</div>
+      <div class="channel"><span class="material-symbols-outlined">cell_tower</span>Command</div>
+      <div class="channel"><span class="material-symbols-outlined">cell_tower</span>Logistics</div>
+    </div>
+  </aside>
 
-			<main class="flex flex-1 flex-col">
-				<header class="flex items-center justify-between whitespace-nowrap border-b border-solid border-border-color px-10 py-3 bg-[#151b23]">
-					<div class="flex items-center gap-4 text-text-primary">
-						<div class="size-5">
-							<svg fill="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
-								<path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm0 18c-4.41 0-8-3.59-8-8s3.59-8 8-8 8 3.59 8 8-3.59 8-8 8z"></path>
-								<path d="M12 14c-2.21 0-4-1.79-4-4s1.79-4 4-4 4 1.79 4 4-1.79 4-4 4zm0-6c-1.1 0-2 .9-2 2s.9 2 2 2 2-.9 2-2-.9-2-2-2z"></path>
-							</svg>
-						</div>
-						<h2 class="text-text-primary text-lg font-bold leading-tight tracking-widest uppercase font-display">WalkieTalk v2.0</h2>
-					</div>
+  <main>
+    <header>
+      <div style="display:flex;align-items:center;gap:16px;">
+        <h2>WalkieTalk v2.0</h2>
+      </div>
+      <div style="display:flex;align-items:center;gap:16px;">
+        <div style="display:flex;align-items:center;gap:4px;">
+          <div style="width:12px;height:12px;background:red;border-radius:50%;animation:pulse 1s infinite;"></div>
+          <span style="color:#f87171;font-weight:bold;font-size:0.875rem;">REC</span>
+        </div>
+        <div style="width:40px;height:40px;border:2px solid var(--border-color);border-radius:50%;background-image:url('https://lh3.googleusercontent.com/aida-public/AB6AXuDmdnEn6m-JdFrExt0BIgA3yDCH0LoJwNsTh2FXSIz3n9LOpcb9OVmu4a-eSuv9CwXzeZIRqagLe_a7XgveXED5lhj6AoJ8qXako9mbbP2D3xoon1UDItEfgSyEwBaDHtPGzwfYSt_W1NrHYmzpTWlCM8KVMI9X2hhV1CenGgUzmuMaxCKUlU6pANPVdqlWZ4H8wm7rlULBMjgyeF6cuWuacg8xG91soY-7CI7PKmoBTxphogrBnaHBPbWTnwL1npTqp7yPS1PHqIw');background-size:cover;"></div>
+      </div>
+    </header>
 
-					<div class="flex flex-1 justify-end items-center gap-4">
-						<div class="flex items-center gap-2">
-							<div class="w-3 h-3 rounded-full bg-red-500 animate-pulse"></div>
-							<span class="text-red-400 font-bold text-sm uppercase">REC</span>
-						</div>
-						<div class="bg-center bg-no-repeat aspect-square bg-cover rounded-full size-10 border-2 border-border-color" aria-label="User profile picture" style='background-image: url("https://lh3.googleusercontent.com/a/default-user");'></div>
-					</div>
-				</header>
+    <div class="main-content">
+      <div class="segmented-display">
+        <p style="font-size:1rem;color:var(--text-secondary);">Current Channel</p>
+        <h1 id="current-channel">ALPHA</h1>
+      </div>
+      <button class="transmit-btn" id="transmitBtn">
+        <span class="material-symbols-outlined">mic</span>
+        <span>Transmit</span>
+      </button>
+      <div class="status">
+        <div class="ping"><div></div></div>
+        <span id="transmission-status">Transmission Active</span>
+      </div>
+      <!-- Local waveform canvas -->
+      <canvas id="localWaveform" width="500" height="80" style="margin-top:16px;"></canvas>
+    </div>
+  </main>
+</div>
 
-				<div class="flex flex-1 flex-col items-center justify-center p-8 gap-8">
-					<div class="segmented-display w-full max-w-sm text-center">
-						<p class="text-text-secondary font-display text-base uppercase tracking-widest">Current Channel</p>
-						<h1 id="desktopChannel" class="text-primary font-display text-5xl font-bold tracking-wider uppercase">ALPHA</h1>
-					</div>
+<script>
+let localStream, pc;
+const transmitBtn = document.getElementById('transmitBtn');
+const transmissionStatus = document.getElementById('transmission-status');
+let currentChannel = document.getElementById('current-channel').textContent;
+const localCanvas = document.getElementById('localWaveform');
+const localCtx = localCanvas.getContext('2d');
+let remoteUsers = {};
+let userId = 'user_' + Math.random().toString(36).substr(2,9);
+let username = 'You';
 
-					<div class="relative group">
-						<div class="absolute -inset-0.5 bg-gradient-to-r from-green-600 to-green-400 rounded-full blur-xl opacity-20 group-hover:opacity-50 transition duration-1000 group-active:opacity-100"></div>
-						<button class="relative flex size-64 cursor-pointer items-center justify-center rounded-full bg-[#3c4a5e] text-text-primary transition-all duration-200 shadow-button-idle active:shadow-button-press active:bg-primary active:text-white flex-col gap-2 border-4 border-[#2d3748] active:border-primary/50" aria-label="Transmit">
-							<span class="material-symbols-outlined text-7xl drop-shadow-lg">mic</span>
-							<span class="text-2xl font-bold uppercase tracking-widest font-body">Transmit</span>
-						</button>
-					</div>
-
-					<div class="flex items-center gap-4 p-4 rounded-lg bg-surface-dark border border-border-color">
-						<div class="relative flex items-center justify-center w-12 h-12">
-							<div class="absolute w-full h-full bg-green-500 rounded-full animate-ping opacity-50"></div>
-							<div class="relative w-3 h-3 rounded-full bg-green-400"></div>
-						</div>
-						<span class="font-display text-lg uppercase tracking-widest text-primary">Transmission Active</span>
-					</div>
-
-					<section id="mobile-widget" class="w-full flex items-center justify-center">
-						<div class="walkie">
-							<div class="display">
-								<div class="channel-name" id="channel">Channel 1</div>
-								<div class="freq" id="freq">145.00 MHz</div>
-								<div class="led" id="led"></div>
-							</div>
-
-							<div class="channel-dial">
-								<div class="dial-pointer" id="pointer"></div>
-							</div>
-
-							<div class="squelch">
-								<label>Squelch</label>
-								<input type="range" id="squelch" min="0" max="1" step="0.01" value="1" />
-							</div>
-
-							<button id="talkBtn" class="talk-btn">Hold to Talk</button>
-							<canvas id="wave"></canvas>
-						</div>
-					</section>
-				</div>
-			</main>
-		</div>
-	</div>
-
-	<script>
-/* 1) CONFIG: paste your Apps Script Web App URL here */
-const GAS_URL = 'https://script.google.com/macros/s/AKfycbyWholJH3FmZWOaaljdB9iPwZaUQ5nBx-6naCjMoGVjNQXODFHOubgvmguo07Lj8quz/exec';
-
-/* 2) UI + audio setup */
-const channels = Array.from({length:16},(_,i)=>({name:`Channel ${i+1}`,freq:`${(145 + i*0.2).toFixed(2)} MHz`}));
-let currentChannel=0;
-const clientId = Date.now().toString(36) + Math.random().toString(36).slice(2);
-
-const talkBtn=document.getElementById('talkBtn');
-const channelEl=document.getElementById('channel');
-const freqEl=document.getElementById('freq');
-const led=document.getElementById('led');
-const pointer=document.getElementById('pointer');
-const desktopChannel=document.getElementById('desktopChannel');
-const canvas=document.getElementById('wave');
-const canvasCtx=canvas.getContext('2d');
-
-let audioCtx, analyser, dataArray, localStream;
-async function initMedia(){
-	try {
-		localStream = await navigator.mediaDevices.getUserMedia({audio:true});
-		const ctx = new (window.AudioContext||window.webkitAudioContext)();
-		audioCtx = ctx;
-		const source = ctx.createMediaStreamSource(localStream);
-		analyser = ctx.createAnalyser();
-		source.connect(analyser);
-		analyser.fftSize=2048;
-		dataArray=new Uint8Array(analyser.frequencyBinCount);
-		drawWave();
-		// Start muted until talking
-		localStream.getTracks().forEach(t => t.enabled = false);
-	} catch (e) {
-		console.error('Mic permission failed:', e);
-	}
-}
-function drawWave(){
-	requestAnimationFrame(drawWave);
-	if(!analyser) return;
-	analyser.getByteTimeDomainData(dataArray);
-	canvasCtx.fillStyle='#000'; canvasCtx.fillRect(0,0,canvas.width,canvas.height);
-	canvasCtx.lineWidth=2; canvasCtx.strokeStyle='#0f0'; canvasCtx.beginPath();
-	let sliceWidth=canvas.width/dataArray.length; let x=0;
-	for(let i=0;i<dataArray.length;i++){
-		let v=dataArray[i]/128.0; let y=v*canvas.height/2;
-		if(i===0) canvasCtx.moveTo(x,y); else canvasCtx.lineTo(x,y);
-		x+=sliceWidth;
-	}
-	canvasCtx.lineTo(canvas.width,canvas.height/2); canvasCtx.stroke();
-}
-initMedia();
-
-/* 3) WebRTC setup with GAS signaling */
-let pc = null;
-let lastId = 0; // cursor for polling
-
-function startConnection(){
-	if (pc) pc.close();
-	pc = new RTCPeerConnection();
-	pc.ontrack = (e) => {
-		const audio = new Audio();
-		audio.srcObject = e.streams[0];
-		audio.play();
-	};
-	pc.onicecandidate = (event) => {
-		if (event.candidate) sendMsg('ice', event.candidate.toJSON());
-	};
-	if (localStream?.getTracks()?.[0]) {
-		pc.addTrack(localStream.getTracks()[0], localStream);
-	}
-	pc.createOffer().then(offer => pc.setLocalDescription(offer)).then(() => {
-		sendMsg('offer', pc.localDescription.toJSON());
-	});
-}
-
-async function sendMsg(type, payload){
-	try {
-		await fetch(GAS_URL, {
-			method: 'POST',
-			headers: { 'Content-Type': 'application/json' },
-			body: JSON.stringify({ clientId, type, payload, channel: currentChannel })
-		});
-	} catch (e) {
-		console.warn('send failed', e);
-	}
-}
-
-async function poll(){
-	try {
-		const res = await fetch(GAS_URL, {
-			method: 'POST',
-			headers: { 'Content-Type': 'application/json' },
-			body: JSON.stringify({ clientId, type: 'get', channel: currentChannel, since: lastId })
-		});
-		const data = await res.json();
-		if (data?.ok) {
-			const items = data.items || [];
-			for (const msg of items) {
-				lastId = Math.max(lastId, msg.id);
-				if (!pc && (msg.type === 'offer' || msg.type === 'answer' || msg.type === 'ice')) {
-					startConnection();
-				}
-				if (!pc) continue;
-				if (msg.type === 'offer') {
-					pc.setRemoteDescription(new RTCSessionDescription(msg.payload))
-					  .then(() => pc.createAnswer())
-					  .then(ans => pc.setLocalDescription(ans))
-					  .then(() => sendMsg('answer', pc.localDescription.toJSON()));
-				} else if (msg.type === 'answer') {
-					pc.setRemoteDescription(new RTCSessionDescription(msg.payload));
-				} else if (msg.type === 'ice') {
-					pc.addIceCandidate(new RTCIceCandidate(msg.payload));
-				} else if (msg.type === 'speaking') {
-					led.style.background='red'; led.style.boxShadow='0 0 20px red';
-				} else if (msg.type === 'stopped') {
-					led.style.background='green'; led.style.boxShadow='0 0 10px #0f0';
-				}
-			}
-			// Track server's lastId too (helps if server skipped sending any empty set)
-			if (typeof data.lastId === 'number') lastId = Math.max(lastId, data.lastId);
-		}
-	} catch (e) {
-		// console.debug('poll error', e);
-	}
-	setTimeout(poll, 900);
-}
-poll();
-
-/* 4) UI interactions */
-function applyChannelUI() {
-	channelEl.textContent = channels[currentChannel].name;
-	freqEl.textContent = channels[currentChannel].freq;
-	const deg = (currentChannel/(channels.length-1))*360;
-	pointer.style.transform = `rotateX(20deg) rotateY(10deg) rotateZ(${deg}deg)`;
-	desktopChannel.textContent = channels[currentChannel].name.toUpperCase().replace('CHANNEL ','');
-}
-function switchChannel(dir){
-	currentChannel=(currentChannel+dir+channels.length)%channels.length;
-	lastId = 0; // reset cursor when changing channels
-	applyChannelUI();
-	if (pc) { pc.close(); pc = null; }
-	startConnection();
-}
-applyChannelUI();
-
-function startTalking(){
-	if(localStream) localStream.getTracks().forEach(t=>t.enabled=true);
-	sendMsg('speaking', clientId);
-	led.style.background='red'; led.style.boxShadow='0 0 20px red';
-}
-function stopTalking(){
-	if(localStream) localStream.getTracks().forEach(t=>t.enabled=false);
-	sendMsg('stopped', clientId);
-	led.style.background='green'; led.style.boxShadow='0 0 10px #0f0';
-}
-
-document.addEventListener('keydown',e=>{
-	if(e.code==='Space') startTalking();
-	if(e.code==='ArrowUp') switchChannel(1);
-	if(e.code==='ArrowDown') switchChannel(-1);
+// Username modal
+document.getElementById('usernameBtn').addEventListener('click', () => {
+  const input = document.getElementById('usernameInput').value.trim();
+  if(input) username = input;
+  document.getElementById('usernameModal').style.display = 'none';
+  init();
 });
-document.addEventListener('keyup',e=>{ if(e.code==='Space') stopTalking(); });
 
-talkBtn.addEventListener('touchstart',startTalking, {passive:true});
-talkBtn.addEventListener('touchend',stopTalking);
-talkBtn.addEventListener('mousedown',startTalking);
-talkBtn.addEventListener('mouseup',stopTalking);
+// Initialize WebRTC
+async function init() {
+  localStream = await navigator.mediaDevices.getUserMedia({ audio:true });
+  localStream.getAudioTracks()[0].enabled = false;
 
-const squelch=document.getElementById('squelch');
-squelch.addEventListener('input',()=>{ /* placeholder for real squelch logic */ });
+  pc = new RTCPeerConnection();
+  localStream.getTracks().forEach(track => pc.addTrack(track, localStream));
 
-	</script>
+  // Remote tracks
+  pc.ontrack = e => {
+    const streamId = e.streams[0].id;
+    if(!remoteUsers[streamId]) {
+      const color = getRandomColor();
+      const wrapper = document.createElement('div'); wrapper.style.margin='8px 0';
+
+      const label = document.createElement('div');
+      label.textContent = 'User ' + streamId.substr(0,4);
+      label.style.color = '#fff';
+      label.style.backgroundColor = color;
+      label.style.padding = '2px 6px';
+      label.style.borderRadius = '4px';
+      label.style.display = 'inline-block';
+      label.style.fontWeight = 'bold';
+      label.style.marginBottom = '4px';
+      wrapper.appendChild(label);
+
+      const canvas = document.createElement('canvas');
+      canvas.width=500; canvas.height=80;
+      wrapper.appendChild(canvas);
+
+      document.querySelector('.main-content').appendChild(wrapper);
+      const ctx = canvas.getContext('2d');
+      remoteUsers[streamId]={canvas,ctx,label,stream:e.streams[0],color};
+      setupWaveform(canvas,ctx,e.streams[0],color);
+    }
+  };
+
+  pc.onicecandidate = event => {
+    if(event.candidate) google.script.run.sendSignal(currentChannel,{ ice:event.candidate, userId, username });
+  };
+
+  // Local waveform with colored username
+  const localColor='#48bb78';
+  const localWrapper=document.createElement('div'); localWrapper.style.margin='8px 0';
+  const localLabel=document.createElement('div');
+  localLabel.textContent=username;
+  localLabel.style.color='#fff';
+  localLabel.style.backgroundColor=localColor;
+  localLabel.style.padding='2px 6px';
+  localLabel.style.borderRadius='4px';
+  localLabel.style.display='inline-block';
+  localLabel.style.fontWeight='bold';
+  localLabel.style.marginBottom='4px';
+  localWrapper.appendChild(localLabel);
+  localWrapper.appendChild(localCanvas);
+  document.querySelector('.main-content').prepend(localWrapper);
+  setupWaveform(localCanvas, localCtx, localStream, localColor);
+
+  pollSignals();
+}
+
+// Poll GAS for signals
+async function pollSignals() {
+  const signals = await google.script.run.withSuccessHandler(processSignals).getSignals(currentChannel);
+  setTimeout(pollSignals,1000);
+}
+
+// Process incoming signals
+async function processSignals(signals){
+  for(let s of signals){
+    if(s.userId===userId) continue;
+    if(s.offer){
+      await pc.setRemoteDescription(new RTCSessionDescription(s.offer));
+      const answer=await pc.createAnswer();
+      await pc.setLocalDescription(answer);
+      google.script.run.sendSignal(currentChannel,{ answer: pc.localDescription, userId, username });
+    } else if(s.answer){
+      await pc.setRemoteDescription(new RTCSessionDescription(s.answer));
+    } else if(s.ice){
+      try{ await pc.addIceCandidate(s.ice); }catch(e){}
+    }
+    // Update remote label
+    if(s.username && remoteUsers[s.streamId]){
+      remoteUsers[s.streamId].label.textContent=s.username;
+      remoteUsers[s.streamId].label.style.backgroundColor=remoteUsers[s.streamId].color;
+    }
+  }
+}
+
+// Push-to-talk
+transmitBtn.addEventListener('mousedown',()=>{ localStream.getAudioTracks()[0].enabled=true; transmissionStatus.textContent=`Talking on ${currentChannel}`; });
+transmitBtn.addEventListener('mouseup',()=>{ localStream.getAudioTracks()[0].enabled=false; transmissionStatus.textContent=`Listening on ${currentChannel}`; });
+
+// Waveform drawing
+function setupWaveform(canvas,ctx,stream,color){
+  const audioCtx=new (window.AudioContext||window.webkitAudioContext)();
+  const analyser=audioCtx.createAnalyser();
+  const source=audioCtx.createMediaStreamSource(stream);
+  source.connect(analyser);
+  analyser.fftSize=256;
+  const bufferLength=analyser.frequencyBinCount;
+  const dataArray=new Uint8Array(bufferLength);
+  function draw(){
+    requestAnimationFrame(draw);
+    analyser.getByteTimeDomainData(dataArray);
+    ctx.fillStyle='#1a202c'; ctx.fillRect(0,0,canvas.width,canvas.height);
+    ctx.lineWidth=2; ctx.strokeStyle=color; ctx.beginPath();
+    let x=0; const sliceWidth=canvas.width/bufferLength;
+    for(let i=0;i<bufferLength;i++){
+      const v=dataArray[i]/128.0; const y=v*canvas.height/2;
+      if(i===0) ctx.moveTo(x,y); else ctx.lineTo(x,y); x+=sliceWidth;
+    }
+    ctx.lineTo(canvas.width,canvas.height/2); ctx.stroke();
+  }
+  draw();
+}
+
+// Utility random color
+function getRandomColor(){ const colors=['#FF5722','#FFC107','#03A9F4','#E91E63','#9C27B0','#FF9800']; return colors[Math.floor(Math.random()*colors.length)]; }
+
+// Channel switching
+document.querySelectorAll('.channel').forEach(ch=>{
+  ch.addEventListener('click',()=>{
+    document.querySelectorAll('.channel').forEach(c=>c.classList.remove('active'));
+    ch.classList.add('active');
+    currentChannel=ch.textContent.trim();
+    document.getElementById('current-channel').textContent=currentChannel.toUpperCase();
+    if(pc) pc.close(); remoteUsers={};
+    document.querySelectorAll('.main-content > div').forEach(d=>{
+      if(d.querySelector('canvas') && d.querySelector('canvas').id!=='localWaveform') d.remove();
+    });
+    init();
+  });
+});
+</script>
+
 </body>
 </html>
